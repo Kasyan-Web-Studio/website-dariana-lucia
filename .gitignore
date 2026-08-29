@@ -40,3 +40,5 @@ next-env.d.ts
 # Large reference-only recordings remain local and are never part of the public build.
 /source-materials/references/videos/*
 /site-build.tar.gz
+/site-build-*.tar.gz
+/pages-dist/
