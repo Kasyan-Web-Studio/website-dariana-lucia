@@ -6,12 +6,12 @@
 - [x] inventar și copiere non-distructivă a materialelor;
 - [x] documentația de analiză și informații lipsă;
 - [x] configurație pregătită pentru Sites/Cloudflare, fără project ID vechi;
-- [ ] repository GitHub nou și branch `main`;
-- [ ] proiect Cloudflare/Sites nou și deployment;
+- [x] repository GitHub nou și branch `main`;
+- [x] proiect Cloudflare/Sites nou și deployment privat verificat;
 - [ ] verificare media cu inspector dedicat;
 - [ ] aprobare direcție vizuală;
 - [ ] Etapa 1.2: designul și paginile finale.
 
 ## Blocat / necesită acțiune
 
-Crearea repository-ului GitHub și publicarea Site-ului necesită pași externi care se execută după commit-ul local. Numele țintă este liber la verificarea inițială.
+Repository-ul și deploymentul sunt finalizate. Rămân pentru etapa următoare verificarea media dedicată, aprobarea direcției vizuale și implementarea website-ului final.
