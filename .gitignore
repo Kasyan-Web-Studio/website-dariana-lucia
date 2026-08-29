@@ -37,3 +37,5 @@ next-env.d.ts
 /outputs/
 /work/
 *.tsbuildinfo
+# Large reference-only recordings remain local and are never part of the public build.
+/source-materials/references/videos/*
