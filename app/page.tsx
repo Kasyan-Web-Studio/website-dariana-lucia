@@ -60,7 +60,6 @@ export default function Home() {
   return (
     <main id="acasa" className={`site-shell${introVisible ? ' intro-active' : ''}`}>
       {introVisible && <section className={`intro${introLeaving ? ' intro-leaving' : ''}`} aria-label="Intro Dariana și Lucia">
-        <video ref={introVideoRef} className="intro-media" autoPlay muted playsInline poster="/assets/poster.svg" preload="metadata" aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>
         <div className="intro-shade" aria-hidden="true" /><div className="intro-center"><BrandLogo variant="intro" alt="Dariana & Lucia — Lashes & Nails Studio" /><div className="intro-progress" aria-hidden="true"><span /></div></div>
       </section>}
 
