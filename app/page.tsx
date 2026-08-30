@@ -72,7 +72,6 @@ export default function Home() {
       </header>
 
       <section id="hero" className={`hero${heroReady ? ' hero-ready' : ''}`} aria-labelledby="hero-title">
-        <img className="hero-image" src="/assets/images/hero-iubi.png" alt="Detaliu editorial cu machiaj, gene și unghii în tonuri burgundy" fetchPriority="high" />
         <div className="hero-shade" aria-hidden="true" /><div className="hero-orbit hero-orbit-one" aria-hidden="true" /><div className="hero-orbit hero-orbit-two" aria-hidden="true" />
         <div className="hero-copy"><p className="hero-eyebrow"><span className="eyebrow-line" />{homeContent.eyebrow}</p><h1 id="hero-title">{homeContent.title}</h1><p className="hero-subtitle">{homeContent.subtitle}</p>
           <div className="hero-ctas"><a className="button button-primary" href="#programare">{homeContent.primaryCta} <span aria-hidden="true">↗</span></a><a className="button button-ghost" href="#galerie">{homeContent.secondaryCta} <span aria-hidden="true">↗</span></a></div>
