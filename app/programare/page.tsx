@@ -1,11 +1,13 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function BookingPage() {
-  const params = useSearchParams();
-  const category = params.get('categorie') === 'unghii' ? 'unghii' : 'gene';
+  const [category, setCategory] = useState<'gene' | 'unghii'>('gene');
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('categorie') === 'unghii') setCategory('unghii');
+  }, []);
   const specialist = category === 'unghii' ? 'Lucia' : 'Dariana';
   const label = category === 'unghii' ? 'unghii' : 'gene';
 
