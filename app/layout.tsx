@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Dariana & Lucia — Lashes & Nails Studio',
-  description: 'Website în dezvoltare pentru Dariana, Lash Artist, și Lucia, Nail Artist.',
+  title: 'Dariana & Lucia — Beauty Studio',
+  description: 'Beauty, shaped in every detail. Gene și unghii realizate cu precizie, grijă și stil.',
 };
 
 export default function RootLayout({

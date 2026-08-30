@@ -10,7 +10,7 @@
     "build": "vinext build",
     "build:pages": "node scripts/build-pages.mjs",
     "start": "vinext start",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern pages-dist --ignore-pattern .next",
     "typecheck": "tsc --noEmit",
     "test": "npm run typecheck"
   },
