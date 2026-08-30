@@ -19,6 +19,14 @@ export default function Home() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLElement>(null);
 
+  function closeIntro() {
+    sessionStorage.setItem('dariana-lucia-intro-seen', 'true');
+    introVideoRef.current?.pause();
+    setHeroReady(true);
+    setIntroLeaving(true);
+    window.setTimeout(() => setIntroVisible(false), 700);
+  }
+
   useEffect(() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const alreadySeen = sessionStorage.getItem('dariana-lucia-intro-seen') === 'true';
@@ -50,14 +58,6 @@ export default function Home() {
     menuPanelRef.current?.querySelector<HTMLElement>('a')?.focus();
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [menuOpen]);
-
-  function closeIntro() {
-    sessionStorage.setItem('dariana-lucia-intro-seen', 'true');
-    introVideoRef.current?.pause();
-    setHeroReady(true);
-    setIntroLeaving(true);
-    window.setTimeout(() => setIntroVisible(false), 700);
-  }
 
   function toggleMenu() {
     setMenuOpen((open) => { if (open) window.setTimeout(() => menuButtonRef.current?.focus(), 50); return !open; });
