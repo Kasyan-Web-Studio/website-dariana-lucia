@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { homeContent } from '@/src/data/home';
+import { featuredGalleryItems, type GalleryCategory } from '@/src/data/gallery';
+import { testimonials } from '@/src/data/testimonials';
+import { locations } from '@/src/data/locations';
 
 const introDuration = 5000;
 
@@ -19,6 +22,7 @@ export default function Home() {
   const [videoMounted, setVideoMounted] = useState(true);
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [galleryFilter, setGalleryFilter] = useState<'toate' | GalleryCategory>('toate');
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLElement>(null);
@@ -77,6 +81,10 @@ export default function Home() {
     setMenuOpen((open) => { if (open) window.setTimeout(() => menuButtonRef.current?.focus(), 50); return !open; });
   }
 
+  const visibleGalleryItems = galleryFilter === 'toate'
+    ? featuredGalleryItems
+    : featuredGalleryItems.filter((item) => item.category === galleryFilter);
+
   return (
     <main id="acasa" className={`site-shell${introVisible ? ' intro-active' : ''}`}>
       {introVisible && <section className={`intro${introLeaving ? ' intro-leaving' : ''}`} aria-label="Intro Dariana și Lucia">
@@ -97,7 +105,13 @@ export default function Home() {
 
       <section id="servicii" className="services-preview" aria-labelledby="services-title"><div className="services-heading"><h2 id="services-title">Ritualuri create pentru tine.</h2></div><div className="service-list"><article><div className="service-icon service-icon-lashes" aria-hidden="true" /><h3>Gene</h3><p>Privire definită, proporții naturale și un rezultat care te reprezintă.</p></article><article><div className="service-icon service-icon-nails" aria-hidden="true" /><h3>Unghii</h3><p>Forme curate, nuanțe atent alese și detalii care completează fiecare gest.</p></article><article><div className="service-icon service-icon-experience" aria-hidden="true" /><h3>Experiență personalizată</h3><p>Un ritual creat pentru tine, de la prima inspirație până la ultimul detaliu.</p></article></div></section>
 
-      <section className="pre-footer-cta" aria-labelledby="pre-footer-title"><h2 id="pre-footer-title">Pregătită pentru următorul tău look?</h2><p>Alege serviciul potrivit și programează-te în câteva momente.</p><div className="pre-footer-actions"><a className="button button-primary" href="/programare?categorie=gene">Programare gene <span aria-hidden="true">↗</span></a><a className="button button-primary" href="/programare?categorie=unghii">Programare unghii <span aria-hidden="true">↗</span></a></div></section>
+      <section id="galerie" className="gallery-preview" aria-labelledby="gallery-title"><div className="section-heading"><p className="section-kicker">Preview</p><h2 id="gallery-title">Lucrările noastre</h2><p>Detalii atent realizate, rezultate care vorbesc de la sine.</p></div><div className="gallery-filters" role="group" aria-label="Filtre galerie"><button className={`gallery-filter${galleryFilter === 'toate' ? ' is-active' : ''}`} type="button" onClick={() => setGalleryFilter('toate')} aria-pressed={galleryFilter === 'toate'}>Toate</button><button className={`gallery-filter${galleryFilter === 'gene' ? ' is-active' : ''}`} type="button" onClick={() => setGalleryFilter('gene')} aria-pressed={galleryFilter === 'gene'}>Gene</button><button className={`gallery-filter${galleryFilter === 'unghii' ? ' is-active' : ''}`} type="button" onClick={() => setGalleryFilter('unghii')} aria-pressed={galleryFilter === 'unghii'}>Unghii</button></div><div className="gallery-grid">{visibleGalleryItems.map((item) => <article className={`gallery-card gallery-card-${item.category}`} key={item.id}><div className="gallery-placeholder" aria-label="Fotografie în curând"><span className="gallery-placeholder-icon" aria-hidden="true" /><span>Fotografie în curând</span></div><div className="gallery-card-meta"><span>{item.category === 'gene' ? 'Gene' : 'Unghii'}</span><h3>{item.title}</h3></div></article>)}</div><a className="button button-outline gallery-more" href="/galerie">Vezi galeria completă <span aria-hidden="true">↗</span></a></section>
+
+      <section id="recenzii" className="testimonials-section" aria-labelledby="testimonials-title"><div className="section-heading"><p className="section-kicker">Feedback</p><h2 id="testimonials-title">Ce spun clientele noastre</h2><p>Experiențe construite cu grijă, precizie și atenție la fiecare detaliu.</p></div><div className="testimonials-grid">{testimonials.filter((item) => item.featured).map((item) => <article className="testimonial-card" key={item.id}><span className="testimonial-mark" aria-hidden="true">“</span><p className="testimonial-placeholder">{item.approved && item.text ? item.text : 'Testimonial în curând'}</p><p className="testimonial-note">{item.approved && item.text ? `${item.service} · ${item.name ?? ''}` : 'Recenzie clientă · Conținutul va fi adăugat după primirea recenziilor reale'}</p></article>)}</div></section>
+
+      <section id="contact" className="locations-section" aria-labelledby="locations-title"><div className="section-heading"><p className="section-kicker">Găsește-ne</p><h2 id="locations-title">Unde ne găsești</h2><p>Alege locația potrivită serviciului dorit.</p></div><div className="locations-grid">{locations.map((location) => <article className={`location-card location-card-${location.category}`} key={location.id}><span className="location-icon" aria-hidden="true" /><p className="location-specialist">{location.specialist}</p><h3>{location.serviceLabel}</h3><address>{location.address}</address><a className="location-map" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.mapsQuery)}`} target="_blank" rel="noopener noreferrer" aria-label={`Deschide locația pentru ${location.category} cu ${location.specialist} în Google Maps`}>Deschide în Google Maps <span aria-hidden="true">↗</span></a></article>)}</div><p className="locations-note">Programările se realizează în locații diferite.</p></section>
+
+      <section className="pre-footer-cta" aria-labelledby="pre-footer-title"><h2 id="pre-footer-title">Pregătită pentru următorul tău look?</h2><p>Alege serviciul dorit și continuă direct către programare.</p><div className="pre-footer-actions"><a className="button button-primary" href="/programare?categorie=gene">Programare gene <span aria-hidden="true">↗</span></a><a className="button button-primary" href="/programare?categorie=unghii">Programare unghii <span aria-hidden="true">↗</span></a></div></section>
 
       <aside ref={menuPanelRef} id="main-menu" className={`menu-overlay${menuOpen ? ' is-open' : ''}`} aria-hidden={!menuOpen} aria-label="Meniu principal"><div className="menu-backdrop" aria-hidden="true" /><div className="menu-inner"><BrandLogo variant="mark" alt="DL" className="menu-logo" /><p className="menu-kicker">The details make the difference <span>✦</span></p><nav><ol>{homeContent.menu.map((item, index) => <li key={item.label} style={{ '--item-index': index } as React.CSSProperties}><span className="menu-index">0{index + 1}</span><a href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a></li>)}</ol></nav><div className="menu-footer"><span>Dariana &amp; Lucia Studio</span><span>Est. 2026</span></div></div></aside>
       <footer className="site-footer"><BrandLogo variant="no-slogan" alt="Dariana & Lucia — Lashes & Nails Studio" /><p>Beauty, shaped in every detail.</p></footer>
