@@ -14,21 +14,33 @@ export default function Home() {
   const [introVisible, setIntroVisible] = useState(true);
   const [introLeaving, setIntroLeaving] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoFading, setVideoFading] = useState(false);
+  const [videoMounted, setVideoMounted] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLElement>(null);
 
   function closeIntro() {
-    introVideoRef.current?.pause();
+    const video = introVideoRef.current;
+    video?.pause();
+    if (video) video.currentTime = 0;
+    setVideoMounted(false);
     setHeroReady(true);
     setIntroLeaving(true);
     window.setTimeout(() => setIntroVisible(false), 700);
   }
 
+  function handleVideoReady() {
+    setVideoReady(true);
+    void introVideoRef.current?.play().catch(() => undefined);
+  }
+
   useEffect(() => {
+    const fadeTimer = window.setTimeout(() => setVideoFading(true), introDuration - 500);
     const timer = window.setTimeout(closeIntro, introDuration);
-    return () => window.clearTimeout(timer);
+    return () => { window.clearTimeout(fadeTimer); window.clearTimeout(timer); };
   }, []);
 
   useEffect(() => {
@@ -60,7 +72,7 @@ export default function Home() {
   return (
     <main id="acasa" className={`site-shell${introVisible ? ' intro-active' : ''}`}>
       {introVisible && <section className={`intro${introLeaving ? ' intro-leaving' : ''}`} aria-label="Intro Dariana și Lucia">
-        <video ref={introVideoRef} className="intro-media" autoPlay muted playsInline poster="/assets/poster.svg" preload="metadata" aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>
+        {videoMounted && <video ref={introVideoRef} className={`intro-media${videoReady ? ' intro-video-ready' : ''}${videoFading ? ' intro-video-fading' : ''}`} autoPlay muted playsInline preload="auto" onLoadedData={handleVideoReady} onCanPlay={handleVideoReady} aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>}
         <div className="intro-shade" aria-hidden="true" /><div className="intro-center"><BrandLogo variant="intro" alt="Dariana & Lucia — Lashes & Nails Studio" /><div className="intro-progress" aria-hidden="true"><span /></div></div>
       </section>}
 
