@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { homeContent } from '@/src/data/home';
 
-const introDuration = 2600;
-
 function BrandLogo({ variant, alt, className = '' }: { variant: 'intro' | 'mark' | 'no-slogan' | 'light'; alt: string; className?: string }) {
   const files = { intro: 'logo-intro.png', mark: 'logo-mark-dl.png', 'no-slogan': 'logo-no-slogan.png', light: 'logo-light.png' };
   return <img className={`brand-logo brand-logo-${variant} ${className}`} src={`/assets/brand/${files[variant]}`} alt={alt} />;
@@ -24,8 +22,7 @@ export default function Home() {
     const alreadySeen = sessionStorage.getItem('dariana-lucia-intro-seen') === 'true';
     const timer = window.setTimeout(() => {
       if (reducedMotion || alreadySeen) { setIntroVisible(false); setHeroReady(true); }
-      else closeIntro();
-    }, reducedMotion || alreadySeen ? 0 : introDuration);
+    }, 0);
     return () => window.clearTimeout(timer);
   }, []);
 
