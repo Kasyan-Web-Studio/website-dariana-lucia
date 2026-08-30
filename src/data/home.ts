@@ -6,7 +6,7 @@ export const homeContent = {
   primaryCta: 'Programează-te',
   secondaryCta: 'Vezi lucrările',
   menu: [
-    { label: 'Acasă', href: '#acasa' },
+    { label: 'Acasă', href: '/' },
     { label: 'Despre', href: '/despre' },
     { label: 'Servicii', href: '/servicii' },
     { label: 'Prețuri', href: '/preturi' },

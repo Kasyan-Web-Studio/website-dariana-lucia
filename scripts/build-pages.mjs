@@ -21,7 +21,7 @@ await mkdir('pages-dist', { recursive: true });
 await cp('dist/client', 'pages-dist', { recursive: true });
 await cp('dist/server/prerendered-routes', 'pages-dist', { recursive: true, force: true });
 
-for (const route of ['despre', 'servicii', 'preturi', 'galerie', 'programare', 'contact']) {
+for (const route of ['despre', 'servicii', 'preturi', 'galerie', 'programare', 'contact', 'politica-de-confidentialitate', 'politica-cookies']) {
   await mkdir(`pages-dist/${route}`, { recursive: true });
   await cp(`pages-dist/${route}.html`, `pages-dist/${route}/index.html`);
 }
