@@ -20,7 +20,6 @@ export default function Home() {
   const menuPanelRef = useRef<HTMLElement>(null);
 
   function closeIntro() {
-    sessionStorage.setItem('dariana-lucia-intro-seen', 'true');
     introVideoRef.current?.pause();
     setHeroReady(true);
     setIntroLeaving(true);
@@ -28,12 +27,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const alreadySeen = sessionStorage.getItem('dariana-lucia-intro-seen') === 'true';
-    const timer = window.setTimeout(() => {
-      if (reducedMotion || alreadySeen) { setIntroVisible(false); setHeroReady(true); }
-      else closeIntro();
-    }, reducedMotion || alreadySeen ? 0 : introDuration);
+    const timer = window.setTimeout(closeIntro, introDuration);
     return () => window.clearTimeout(timer);
   }, []);
 
