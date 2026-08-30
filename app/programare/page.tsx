@@ -6,7 +6,9 @@ import Link from 'next/link';
 export default function BookingPage() {
   const [category, setCategory] = useState<'gene' | 'unghii'>('gene');
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get('categorie') === 'unghii') setCategory('unghii');
+    if (new URLSearchParams(window.location.search).get('categorie') !== 'unghii') return;
+    const timer = window.setTimeout(() => setCategory('unghii'), 0);
+    return () => window.clearTimeout(timer);
   }, []);
   const specialist = category === 'unghii' ? 'Lucia' : 'Dariana';
   const label = category === 'unghii' ? 'unghii' : 'gene';
