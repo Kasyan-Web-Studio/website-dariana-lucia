@@ -86,7 +86,7 @@ export default function Home() {
 
       <header className={`site-header${headerScrolled ? ' header-scrolled' : ''}`}>
         <a className="header-logo" href="#acasa" aria-label="Dariana și Lucia — Acasă"><picture><source media="(max-width: 699px)" srcSet="/assets/brand/logo-gold-woman-v1.png?v=1" /><img src="/assets/brand/logo-gold-woman-v1.png?v=1" alt="Dariana & Lucia — Nails & Lashes" /></picture></a>
-        <div className="header-actions"><a className="button button-booking" href="/programare">Programare <span aria-hidden="true">↗</span></a>
+        <div className="header-actions">
           <button ref={menuButtonRef} className={`menu-toggle${menuOpen ? ' is-open' : ''}`} type="button" aria-label={menuOpen ? 'Închide meniul' : 'Deschide meniul'} aria-expanded={menuOpen} aria-controls="main-menu" onClick={toggleMenu}><span /><span /><span /></button>
         </div>
       </header>
