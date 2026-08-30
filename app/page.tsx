@@ -63,12 +63,12 @@ export default function Home() {
     <main id="acasa" className="site-shell">
       {introVisible && <section className={`intro${introLeaving ? ' intro-leaving' : ''}`} aria-label="Intro Dariana și Lucia">
         <video className="intro-media" autoPlay muted playsInline poster="/assets/poster.svg" preload="metadata" aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>
-        <div className="intro-shade" aria-hidden="true" /><div className="intro-center"><BrandLogo variant="intro" alt="Dariana & Lucia — Lashes & Nails Studio" /><div className="intro-progress" aria-hidden="true"><span /></div></div>
+        <div className="intro-shade" aria-hidden="true" /><div className="intro-center"><div className="intro-progress" aria-hidden="true"><span /></div></div>
         <button className="intro-skip" type="button" onClick={closeIntro}>Skip intro <span aria-hidden="true">↗</span></button>
       </section>}
 
       <header className="site-header">
-        <a className="header-logo" href="#acasa" aria-label="Dariana și Lucia — Acasă"><BrandLogo variant="mark" alt="DL" /></a>
+        <a className="header-logo" href="#acasa" aria-label="Dariana și Lucia — Acasă"><picture><source media="(max-width: 699px)" srcSet="/assets/brand/logo-no-slogan.png" /><img src="/assets/brand/logo-full.png" alt="Dariana & Lucia — Lashes & Nails Studio" /></picture></a>
         <div className="header-actions"><a className="button button-booking" href="#programare">Programare <span aria-hidden="true">↗</span></a>
           <button ref={menuButtonRef} className={`menu-toggle${menuOpen ? ' is-open' : ''}`} type="button" aria-label={menuOpen ? 'Închide meniul' : 'Deschide meniul'} aria-expanded={menuOpen} aria-controls="main-menu" onClick={toggleMenu}><span /><span /><span /></button>
         </div>
@@ -76,7 +76,7 @@ export default function Home() {
 
       <section id="hero" className="hero" aria-labelledby="hero-title">
         <video className="hero-media" autoPlay muted loop playsInline poster="/assets/poster.svg" preload="metadata" aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>
-        <div className="hero-shade" aria-hidden="true" /><div className="hero-orbit hero-orbit-one" aria-hidden="true" /><div className="hero-orbit hero-orbit-two" aria-hidden="true" /><div className="hero-mark" aria-hidden="true"><BrandLogo variant="mark" alt="" /></div>
+        <div className="hero-shade" aria-hidden="true" /><div className="hero-orbit hero-orbit-one" aria-hidden="true" /><div className="hero-orbit hero-orbit-two" aria-hidden="true" />
         <div className="hero-copy"><p className="hero-eyebrow"><span className="eyebrow-line" />{homeContent.eyebrow}</p><h1 id="hero-title">{homeContent.title}</h1><p className="hero-subtitle">{homeContent.subtitle}</p>
           <div className="hero-ctas"><a className="button button-primary" href="#programare">{homeContent.primaryCta} <span aria-hidden="true">↗</span></a><a className="button button-ghost" href="#galerie">{homeContent.secondaryCta} <span aria-hidden="true">↗</span></a></div>
         </div>
