@@ -21,4 +21,9 @@ await mkdir('pages-dist', { recursive: true });
 await cp('dist/client', 'pages-dist', { recursive: true });
 await cp('dist/server/prerendered-routes', 'pages-dist', { recursive: true, force: true });
 
+for (const route of ['galerie', 'programare']) {
+  await mkdir(`pages-dist/${route}`, { recursive: true });
+  await cp(`pages-dist/${route}.html`, `pages-dist/${route}/index.html`);
+}
+
 console.log('Cloudflare Pages output generated from app/ via vinext in pages-dist/.');
