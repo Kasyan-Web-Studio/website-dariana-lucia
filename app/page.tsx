@@ -76,7 +76,6 @@ export default function Home() {
         <div className="hero-copy"><p className="hero-eyebrow"><span className="eyebrow-line" />{homeContent.eyebrow}</p><h1 id="hero-title">{homeContent.title}</h1><p className="hero-subtitle">{homeContent.subtitle}</p>
           <div className="hero-ctas"><a className="button button-primary" href="#programare">{homeContent.primaryCta} <span aria-hidden="true">↗</span></a><a className="button button-ghost" href="#galerie">{homeContent.secondaryCta} <span aria-hidden="true">↗</span></a></div>
         </div>
-        <div className="hero-meta"><span>01</span><span className="meta-rule" /><span>Beauty studio</span></div><div className="hero-scroll" aria-hidden="true"><span>Scroll to explore</span><i /></div>
       </section>
 
       <section id="despre" className="studio-intro" aria-labelledby="studio-intro-title"><div className="section-index">01 / Despre studio</div><div className="section-copy"><p className="section-kicker">A quiet ritual of detail</p><h2 id="studio-intro-title">Precizie care se simte, stil care rămâne.</h2><p>Un spațiu atent construit pentru momentele în care frumusețea devine timp pentru tine. Fiecare formă, textură și finisaj este ales cu grijă.</p><a className="text-link" href="#servicii">Descoperă serviciile <span aria-hidden="true">↗</span></a></div><div className="section-shape section-shape-circle" aria-hidden="true" /><div className="section-grid" aria-hidden="true" /></section>
