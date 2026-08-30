@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { homeContent } from '@/src/data/home';
 
-const introDuration = 4000;
+const introDuration = 5000;
 
 function BrandLogo({ variant, alt, className = '' }: { variant: 'intro' | 'mark' | 'no-slogan' | 'light'; alt: string; className?: string }) {
   const files = { intro: 'logo-intro.png', mark: 'logo-mark-dl.png', 'no-slogan': 'logo-no-slogan.png', light: 'logo-light.png' };
