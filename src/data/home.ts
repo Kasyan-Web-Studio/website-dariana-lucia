@@ -7,11 +7,12 @@ export const homeContent = {
   secondaryCta: 'Vezi lucrările',
   menu: [
     { label: 'Acasă', href: '#acasa' },
-    { label: 'Despre', href: '#despre' },
-    { label: 'Servicii & Prețuri', href: '#servicii' },
-    { label: 'Galerie', href: '#galerie' },
+    { label: 'Despre', href: '/despre' },
+    { label: 'Servicii', href: '/servicii' },
+    { label: 'Prețuri', href: '/preturi' },
+    { label: 'Galerie', href: '/galerie' },
     { label: 'Programare', href: '/programare' },
-    { label: 'Recenzii', href: '#recenzii' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Recenzii', href: '/#testimoniale' },
+    { label: 'Contact', href: '/contact' },
   ],
 } as const;
