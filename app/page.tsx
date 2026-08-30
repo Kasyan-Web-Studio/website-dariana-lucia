@@ -17,6 +17,7 @@ export default function Home() {
   const [videoReady, setVideoReady] = useState(false);
   const [videoFading, setVideoFading] = useState(false);
   const [videoMounted, setVideoMounted] = useState(true);
+  const [headerScrolled, setHeaderScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -49,6 +50,13 @@ export default function Home() {
   }, [menuOpen]);
 
   useEffect(() => {
+    const onScroll = () => setHeaderScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
     if (!menuOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setMenuOpen(false);
@@ -76,7 +84,7 @@ export default function Home() {
         <div className="intro-shade" aria-hidden="true" /><div className="intro-center"><BrandLogo variant="intro" alt="Dariana & Lucia — Lashes & Nails Studio" /><div className="intro-progress" aria-hidden="true"><span /></div></div>
       </section>}
 
-      <header className="site-header">
+      <header className={`site-header${headerScrolled ? ' header-scrolled' : ''}`}>
         <a className="header-logo" href="#acasa" aria-label="Dariana și Lucia — Acasă"><picture><source media="(max-width: 699px)" srcSet="/assets/brand/logo-gold-woman-v1.png?v=1" /><img src="/assets/brand/logo-gold-woman-v1.png?v=1" alt="Dariana & Lucia — Nails & Lashes" /></picture></a>
         <div className="header-actions"><a className="button button-booking" href="#programare">Programare <span aria-hidden="true">↗</span></a>
           <button ref={menuButtonRef} className={`menu-toggle${menuOpen ? ' is-open' : ''}`} type="button" aria-label={menuOpen ? 'Închide meniul' : 'Deschide meniul'} aria-expanded={menuOpen} aria-controls="main-menu" onClick={toggleMenu}><span /><span /><span /></button>
@@ -90,9 +98,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="despre" className="studio-intro" aria-labelledby="studio-intro-title"><div className="section-index">01 / Despre studio</div><div className="section-copy"><p className="section-kicker">A quiet ritual of detail</p><h2 id="studio-intro-title">Precizie care se simte, stil care rămâne.</h2><p>Un spațiu atent construit pentru momentele în care frumusețea devine timp pentru tine. Fiecare formă, textură și finisaj este ales cu grijă.</p><a className="text-link" href="#servicii">Descoperă serviciile <span aria-hidden="true">↗</span></a></div><div className="section-shape section-shape-circle" aria-hidden="true" /><div className="section-grid" aria-hidden="true" /></section>
+      <section id="despre" className="studio-intro" aria-labelledby="studio-intro-title"><div className="section-index">01 / Despre studio</div><div className="section-copy"><p className="section-kicker">A quiet ritual of detail</p><h2 id="studio-intro-title">Precizie care se simte, stil care rămâne.</h2><p>Un spațiu atent construit pentru momentele în care frumusețea devine timp pentru tine. Fiecare formă, textură și finisaj este ales cu grijă.</p><a className="text-link" href="#servicii">Descoperă serviciile <span aria-hidden="true">↗</span></a><ul className="benefit-list"><li><span aria-hidden="true">✦</span><div><strong>Atenție la detalii</strong><small>Fiecare finisaj este atent lucrat.</small></div></li><li><span aria-hidden="true">◇</span><div><strong>Produse premium</strong><small>Texturi și formule alese cu grijă.</small></div></li><li><span aria-hidden="true">○</span><div><strong>Rezultate personalizate</strong><small>Un look creat pentru tine.</small></div></li></ul></div><div className="section-art" aria-hidden="true"><div className="section-art-square" /><div className="section-art-circle" /><span>DL</span></div><div className="section-shape section-shape-circle" aria-hidden="true" /><div className="section-grid" aria-hidden="true" /></section>
 
-      <section id="servicii" className="services-preview" aria-labelledby="services-title"><div className="section-index">02 / Servicii &amp; prețuri</div><div className="services-heading"><p className="section-kicker">The finishing touch</p><h2 id="services-title">Ritualuri create pentru tine.</h2></div><div className="service-list"><article><span>01</span><h3>Lashes</h3><p>Privire definită, proporții naturale și un rezultat care te reprezintă.</p></article><article><span>02</span><h3>Nails</h3><p>Forme curate, nuanțe atent alese și detalii care completează fiecare gest.</p></article><article><span>03</span><h3>Signature</h3><p>O experiență personalizată, de la prima inspirație până la ultimul detaliu.</p></article></div></section>
+      <section id="servicii" className="services-preview" aria-labelledby="services-title"><div className="section-index">02 / Servicii &amp; prețuri</div><div className="services-heading"><p className="section-kicker">The finishing touch</p><h2 id="services-title">Ritualuri create pentru tine.</h2></div><div className="service-list"><article><span>01</span><div className="service-icon" aria-hidden="true">⌁</div><h3>Gene</h3><p>Privire definită, proporții naturale și un rezultat care te reprezintă.</p></article><article><span>02</span><div className="service-icon" aria-hidden="true">○</div><h3>Unghii</h3><p>Forme curate, nuanțe atent alese și detalii care completează fiecare gest.</p></article><article><span>03</span><div className="service-icon" aria-hidden="true">✦</div><h3>Experiență personalizată</h3><p>Un ritual creat pentru tine, de la prima inspirație până la ultimul detaliu.</p></article></div></section>
+
+      <section className="pre-footer-cta" aria-labelledby="pre-footer-title"><p className="section-kicker">Your next signature look</p><h2 id="pre-footer-title">Pregătită pentru următorul tău look?</h2><a className="button button-primary" href="#programare">Programează-te <span aria-hidden="true">↗</span></a></section>
 
       <aside ref={menuPanelRef} id="main-menu" className={`menu-overlay${menuOpen ? ' is-open' : ''}`} aria-hidden={!menuOpen} aria-label="Meniu principal"><div className="menu-backdrop" aria-hidden="true" /><div className="menu-inner"><BrandLogo variant="mark" alt="DL" className="menu-logo" /><p className="menu-kicker">The details make the difference <span>✦</span></p><nav><ol>{homeContent.menu.map((item, index) => <li key={item.label} style={{ '--item-index': index } as React.CSSProperties}><span className="menu-index">0{index + 1}</span><a href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a></li>)}</ol></nav><div className="menu-footer"><span>Dariana &amp; Lucia Studio</span><span>Est. 2026</span></div></div></aside>
       <footer className="site-footer"><BrandLogo variant="no-slogan" alt="Dariana & Lucia — Lashes & Nails Studio" /><p>Beauty, shaped in every detail.</p></footer>
