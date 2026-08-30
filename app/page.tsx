@@ -13,7 +13,9 @@ function BrandLogo({ variant, alt, className = '' }: { variant: 'intro' | 'mark'
 export default function Home() {
   const [introVisible, setIntroVisible] = useState(true);
   const [introLeaving, setIntroLeaving] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const introVideoRef = useRef<HTMLVideoElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLElement>(null);
 
@@ -21,7 +23,7 @@ export default function Home() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const alreadySeen = sessionStorage.getItem('dariana-lucia-intro-seen') === 'true';
     const timer = window.setTimeout(() => {
-      if (reducedMotion || alreadySeen) setIntroVisible(false);
+      if (reducedMotion || alreadySeen) { setIntroVisible(false); setHeroReady(true); }
       else closeIntro();
     }, reducedMotion || alreadySeen ? 0 : introDuration);
     return () => window.clearTimeout(timer);
@@ -51,6 +53,8 @@ export default function Home() {
 
   function closeIntro() {
     sessionStorage.setItem('dariana-lucia-intro-seen', 'true');
+    introVideoRef.current?.pause();
+    setHeroReady(true);
     setIntroLeaving(true);
     window.setTimeout(() => setIntroVisible(false), 700);
   }
@@ -62,9 +66,8 @@ export default function Home() {
   return (
     <main id="acasa" className="site-shell">
       {introVisible && <section className={`intro${introLeaving ? ' intro-leaving' : ''}`} aria-label="Intro Dariana și Lucia">
-        <video className="intro-media" autoPlay muted playsInline poster="/assets/poster.svg" preload="metadata" aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>
+        <video ref={introVideoRef} className="intro-media" autoPlay muted playsInline poster="/assets/poster.svg" preload="metadata" onEnded={closeIntro} aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>
         <div className="intro-shade" aria-hidden="true" /><div className="intro-center"><div className="intro-progress" aria-hidden="true"><span /></div></div>
-        <button className="intro-skip" type="button" onClick={closeIntro}>Skip intro <span aria-hidden="true">↗</span></button>
       </section>}
 
       <header className="site-header">
@@ -74,14 +77,18 @@ export default function Home() {
         </div>
       </header>
 
-      <section id="hero" className="hero" aria-labelledby="hero-title">
-        <video className="hero-media" autoPlay muted loop playsInline poster="/assets/poster.svg" preload="metadata" aria-hidden="true"><source src="/assets/videos/intro/beauty-hero-higgsfield.mp4" type="video/mp4" /></video>
+      <section id="hero" className={`hero${heroReady ? ' hero-ready' : ''}`} aria-labelledby="hero-title">
+        <img className="hero-image" src="/assets/images/hero-iubi.png" alt="Detaliu editorial cu machiaj, gene și unghii în tonuri burgundy" fetchPriority="high" />
         <div className="hero-shade" aria-hidden="true" /><div className="hero-orbit hero-orbit-one" aria-hidden="true" /><div className="hero-orbit hero-orbit-two" aria-hidden="true" />
         <div className="hero-copy"><p className="hero-eyebrow"><span className="eyebrow-line" />{homeContent.eyebrow}</p><h1 id="hero-title">{homeContent.title}</h1><p className="hero-subtitle">{homeContent.subtitle}</p>
           <div className="hero-ctas"><a className="button button-primary" href="#programare">{homeContent.primaryCta} <span aria-hidden="true">↗</span></a><a className="button button-ghost" href="#galerie">{homeContent.secondaryCta} <span aria-hidden="true">↗</span></a></div>
         </div>
         <div className="hero-meta"><span>01</span><span className="meta-rule" /><span>Beauty studio</span></div><div className="hero-scroll" aria-hidden="true"><span>Scroll to explore</span><i /></div>
       </section>
+
+      <section id="despre" className="studio-intro" aria-labelledby="studio-intro-title"><div className="section-index">01 / Despre studio</div><div className="section-copy"><p className="section-kicker">A quiet ritual of detail</p><h2 id="studio-intro-title">Precizie care se simte, stil care rămâne.</h2><p>Un spațiu atent construit pentru momentele în care frumusețea devine timp pentru tine. Fiecare formă, textură și finisaj este ales cu grijă.</p><a className="text-link" href="#servicii">Descoperă serviciile <span aria-hidden="true">↗</span></a></div><div className="section-shape section-shape-circle" aria-hidden="true" /><div className="section-grid" aria-hidden="true" /></section>
+
+      <section id="servicii" className="services-preview" aria-labelledby="services-title"><div className="section-index">02 / Servicii &amp; prețuri</div><div className="services-heading"><p className="section-kicker">The finishing touch</p><h2 id="services-title">Ritualuri create pentru tine.</h2></div><div className="service-list"><article><span>01</span><h3>Lashes</h3><p>Privire definită, proporții naturale și un rezultat care te reprezintă.</p></article><article><span>02</span><h3>Nails</h3><p>Forme curate, nuanțe atent alese și detalii care completează fiecare gest.</p></article><article><span>03</span><h3>Signature</h3><p>O experiență personalizată, de la prima inspirație până la ultimul detaliu.</p></article></div></section>
 
       <aside ref={menuPanelRef} id="main-menu" className={`menu-overlay${menuOpen ? ' is-open' : ''}`} aria-hidden={!menuOpen} aria-label="Meniu principal"><div className="menu-backdrop" aria-hidden="true" /><div className="menu-inner"><BrandLogo variant="mark" alt="DL" className="menu-logo" /><p className="menu-kicker">The details make the difference <span>✦</span></p><nav><ol>{homeContent.menu.map((item, index) => <li key={item.label} style={{ '--item-index': index } as React.CSSProperties}><span className="menu-index">0{index + 1}</span><a href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a></li>)}</ol></nav><div className="menu-footer"><span>Dariana &amp; Lucia Studio</span><span>Est. 2026</span></div></div></aside>
       <footer className="site-footer"><BrandLogo variant="no-slogan" alt="Dariana & Lucia — Lashes & Nails Studio" /><p>Beauty, shaped in every detail.</p></footer>
