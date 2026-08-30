@@ -10,7 +10,7 @@ export const homeContent = {
     { label: 'Despre', href: '#despre' },
     { label: 'Servicii & Prețuri', href: '#servicii' },
     { label: 'Galerie', href: '#galerie' },
-    { label: 'Programare', href: '#programare' },
+    { label: 'Programare', href: '/programare' },
     { label: 'Recenzii', href: '#recenzii' },
     { label: 'Contact', href: '#contact' },
   ],
