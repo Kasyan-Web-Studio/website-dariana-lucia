@@ -18,6 +18,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ro">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                if (window.location.pathname !== '/') return;
+                if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+                var navigation = window.performance.getEntriesByType('navigation')[0];
+                if (navigation && navigation.type === 'reload') {
+                  if (window.location.hash) window.history.replaceState(null, '', window.location.pathname + window.location.search);
+                  window.scrollTo(0, 0);
+                  document.documentElement.scrollTop = 0;
+                  document.body.scrollTop = 0;
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
