@@ -11,7 +11,7 @@ import { siteConfig } from '@/src/data/site-config';
 const introDuration = 5000;
 
 function BrandLogo({ variant, alt, className = '' }: { variant: 'intro' | 'mark' | 'no-slogan' | 'light'; alt: string; className?: string }) {
-  const files = { intro: 'logo-gold-woman-v1.png?v=1', mark: 'logo-gold-woman-v1.png?v=1', 'no-slogan': 'logo-gold-woman-v1.png?v=1', light: 'logo-gold-woman-v1.png?v=1' };
+  const files = { intro: 'logo-dl-minimal-v1.png?v=1', mark: 'logo-dl-minimal-v1.png?v=1', 'no-slogan': 'logo-dl-minimal-v1.png?v=1', light: 'logo-dl-minimal-v1.png?v=1' };
   return <img className={`brand-logo brand-logo-${variant} ${className}`} src={`/assets/brand/${files[variant]}`} alt={alt} />;
 }
 
@@ -95,7 +95,7 @@ export default function Home() {
       </section>}
 
       <header className={`site-header${headerScrolled ? ' header-scrolled' : ''}`}>
-        <a className="header-logo" href="#acasa" aria-label="Dariana și Lucia — Acasă"><picture><source media="(max-width: 699px)" srcSet="/assets/brand/logo-gold-woman-v1.png?v=1" /><img src="/assets/brand/logo-gold-woman-v1.png?v=1" alt="Dariana & Lucia — Nails & Lashes" /></picture></a>
+        <a className="header-logo" href="#acasa" aria-label="Dariana și Lucia — Acasă"><picture><source media="(max-width: 699px)" srcSet="/assets/brand/logo-dl-minimal-v1.png?v=1" /><img src="/assets/brand/logo-dl-minimal-v1.png?v=1" alt="Dariana & Lucia — Nails & Lashes" /></picture></a>
         <div className="header-actions">
           <button ref={menuButtonRef} className={`menu-toggle${menuOpen ? ' is-open' : ''}`} type="button" aria-label={menuOpen ? 'Închide meniul' : 'Deschide meniul'} aria-expanded={menuOpen} aria-controls="main-menu" onClick={toggleMenu}><span /><span /><span /></button>
         </div>
