@@ -34,6 +34,7 @@ export default function BookingPage() {
     if (query.hasCategory && category !== storedCategory) base.serviceSelection = null;
     const validPreselectedService = query.selection === 'service' && category && query.serviceId && getService(category, query.serviceId);
     if (validPreselectedService && category && query.serviceId) base.serviceSelection = { type: 'service', serviceId: query.serviceId };
+    if (query.selection === 'service' && !validPreselectedService) base.serviceSelection = null;
     if (query.selection === 'unknown' && category) base.serviceSelection = { type: 'unknown', description: storedUnknownDescription };
     const initialStep = !category ? 1 : validPreselectedService ? 3 : 2;
     const timer = window.setTimeout(() => {
