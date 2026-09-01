@@ -4,14 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { PageChrome } from '@/src/components/PageChrome';
 import { siteConfig } from '@/src/data/site-config';
-import { bookingCategoryLabel, categorySpecialist, formatBookingDate, formatServiceDuration, formatServicePrice, getContact, getDateBounds, getLocation, getService, getServicesForCategory, isDateInRange, normalizePhone, validatePhone, validateUnknownDescription, createTimeSlots, buildWhatsAppMessage, type BookingCategory, type BookingFormData } from '@/src/lib/booking';
+import { bookingCategoryLabel, categorySpecialist, formatBookingDate, formatServiceDuration, formatServicePrice, getContact, getDateBounds, getLocation, getService, getServicesForCategory, isDateInRange, normalizePhone, validatePhone, validateUnknownDescription, createTimeSlots, buildWhatsAppMessage, parseBookingQuery, type BookingCategory, type BookingFormData } from '@/src/lib/booking';
 
 const draftKey = 'dariana-lucia-booking-draft';
 const initialForm: BookingFormData = { category: null, serviceSelection: null, preferredDate: '', preferredTime: '', clientName: '', clientPhone: '', notes: '', consent: false };
 const steps = ['Categorie', 'Serviciu', 'Dată și oră', 'Date personale', 'Confirmare'];
 type Errors = Record<string, string>;
-
-function validCategory(value: string | null): value is BookingCategory { return value === 'gene' || value === 'unghii'; }
 
 export default function BookingPage() {
   const [form, setForm] = useState<BookingFormData>(initialForm);
@@ -28,31 +26,37 @@ export default function BookingPage() {
   useEffect(() => {
     let stored: Partial<BookingFormData> = {};
     try { stored = JSON.parse(sessionStorage.getItem(draftKey) ?? '{}') as Partial<BookingFormData>; } catch { stored = {}; }
-    const params = new URLSearchParams(window.location.search);
-    const queryCategory = params.get('categorie');
-    const queryService = params.get('serviciu');
-    const storedCategory = validCategory(stored.category ?? null) ? stored.category : null;
-    const category = validCategory(queryCategory) ? queryCategory : storedCategory;
+    const query = parseBookingQuery(window.location.search);
+    const storedCategory = stored.category === 'gene' || stored.category === 'unghii' ? stored.category : null;
+    const category = query.hasCategory ? query.category : storedCategory;
+    const storedUnknownDescription = storedCategory === category && stored.serviceSelection?.type === 'unknown' ? stored.serviceSelection.description : '';
     const base = { ...initialForm, ...stored, category } as BookingFormData;
-    if (category && queryCategory && category !== storedCategory) base.serviceSelection = null;
-    if (category && queryService && getService(category, queryService)) base.serviceSelection = { type: 'service', serviceId: queryService };
+    if (query.hasCategory && category !== storedCategory) base.serviceSelection = null;
+    const validPreselectedService = query.selection === 'service' && category && query.serviceId && getService(category, query.serviceId);
+    if (validPreselectedService && category && query.serviceId) base.serviceSelection = { type: 'service', serviceId: query.serviceId };
+    if (query.selection === 'unknown' && category) base.serviceSelection = { type: 'unknown', description: storedUnknownDescription };
+    const initialStep = !category ? 1 : validPreselectedService ? 3 : 2;
     const timer = window.setTimeout(() => {
       setForm(base);
       if (base.serviceSelection?.type === 'unknown' && base.category) setUnknownDrafts((drafts) => ({ ...drafts, [base.category as BookingCategory]: base.serviceSelection?.type === 'unknown' ? base.serviceSelection.description : '' }));
-      setNotice(queryCategory && !validCategory(queryCategory) ? 'Alege una dintre cele două categorii disponibile.' : queryService && category && !getService(category, queryService) ? 'Serviciul selectat nu mai este disponibil. Alege o altă opțiune.' : '');
-      setStep(category ? 2 : 1);
+      setNotice(query.invalidCategory ? 'Alege una dintre cele două categorii disponibile.' : query.invalidService ? 'Serviciul selectat nu mai este disponibil. Alege o altă opțiune.' : '');
+      setStep(initialStep);
       setHydrated(true);
     }, 0);
     return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => { if (hydrated) sessionStorage.setItem(draftKey, JSON.stringify(form)); }, [form, hydrated]);
-  useEffect(() => { if (form.category && form.serviceSelection?.type === 'unknown') unknownRef.current?.focus(); }, [form.category, form.serviceSelection?.type]);
+  useEffect(() => {
+    if (!hydrated || step !== 2 || !form.category || form.serviceSelection?.type !== 'unknown') return;
+    const timer = window.setTimeout(() => { unknownRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); unknownRef.current?.focus({ preventScroll: true }); }, 80);
+    return () => window.clearTimeout(timer);
+  }, [form.category, form.serviceSelection?.type, hydrated, step]);
 
-  function updateUrl(category: BookingCategory, serviceId?: string) { const url = new URL(window.location.href); url.searchParams.set('categorie', category); if (serviceId) url.searchParams.set('serviciu', serviceId); else url.searchParams.delete('serviciu'); window.history.replaceState({}, '', url); }
+  function updateUrl(category: BookingCategory, serviceId?: string, selection?: 'unknown') { const url = new URL(window.location.href); url.searchParams.set('categorie', category); if (selection === 'unknown') { url.searchParams.set('selectie', 'unknown'); url.searchParams.delete('serviciu'); } else if (serviceId) { url.searchParams.set('serviciu', serviceId); url.searchParams.delete('selectie'); } else { url.searchParams.delete('serviciu'); url.searchParams.delete('selectie'); } window.history.replaceState({}, '', url); }
   function chooseCategory(category: BookingCategory) { setForm((current) => ({ ...current, category, serviceSelection: null })); setErrors({}); setNotice(''); setStep(2); updateUrl(category); }
   function chooseService(serviceId: string) { if (!form.category) return; setForm((current) => ({ ...current, serviceSelection: { type: 'service', serviceId } })); setErrors({}); setNotice(''); updateUrl(form.category, serviceId); }
-  function chooseUnknown() { if (!form.category) return; setForm((current) => ({ ...current, serviceSelection: { type: 'unknown', description: unknownDrafts[form.category as BookingCategory] } })); setErrors({}); setNotice(''); updateUrl(form.category); }
+  function chooseUnknown() { if (!form.category) return; setForm((current) => ({ ...current, serviceSelection: { type: 'unknown', description: unknownDrafts[form.category as BookingCategory] } })); setErrors({}); setNotice(''); updateUrl(form.category, undefined, 'unknown'); }
   function updateUnknownDescription(value: string) { if (!form.category) return; const category = form.category; setUnknownDrafts((drafts) => ({ ...drafts, [category]: value })); setForm((current) => ({ ...current, serviceSelection: { type: 'unknown', description: value } })); if (errors.description && value.trim().length >= 20) setErrors((current) => ({ ...current, description: '' })); }
   function updateField<K extends keyof BookingFormData>(field: K, value: BookingFormData[K]) { setForm((current) => ({ ...current, [field]: value })); setErrors((current) => ({ ...current, [field]: '' })); }
   function focusFirstInvalid(nextErrors: Errors) { const first = Object.keys(nextErrors).find((key) => nextErrors[key]); const element = first ? document.querySelector<HTMLElement>(`[name="${first}"]`) : null; element?.focus(); }

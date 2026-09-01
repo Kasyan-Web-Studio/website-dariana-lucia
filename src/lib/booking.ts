@@ -22,6 +22,16 @@ export const categorySpecialist: Record<BookingCategory, 'Dariana' | 'Lucia'> = 
 
 export function getServicesForCategory(category: BookingCategory): Service[] { return services.filter((service) => service.category === bookingCategoryToService[category]); }
 export function getService(category: BookingCategory, serviceId: string | null): Service | null { return getServicesForCategory(category).find((service) => service.id === serviceId) ?? null; }
+export function isValidServiceId(category: BookingCategory, serviceId: string | null): boolean { return Boolean(serviceId && getService(category, serviceId)); }
+export type BookingQuery = { category: BookingCategory | null; hasCategory: boolean; selection: 'service' | 'unknown' | null; serviceId: string | null; invalidCategory: boolean; invalidService: boolean };
+export function parseBookingQuery(search: string | URLSearchParams): BookingQuery {
+  const params = typeof search === 'string' ? new URLSearchParams(search.startsWith('?') ? search.slice(1) : search) : search;
+  const categoryValue = params.get('categorie');
+  const category = categoryValue === 'gene' || categoryValue === 'unghii' ? categoryValue : null;
+  const serviceId = params.get('serviciu');
+  const selection = params.get('selectie') === 'unknown' ? 'unknown' : serviceId !== null ? 'service' : null;
+  return { category, hasCategory: params.has('categorie'), selection, serviceId, invalidCategory: params.has('categorie') && !category, invalidService: selection === 'service' && Boolean(category && !isValidServiceId(category, serviceId)) };
+}
 export function getLocation(category: BookingCategory): StudioLocation { return locations.find((location) => location.category === category) ?? locations[category === 'gene' ? 0 : 1]; }
 export function getContact(category: BookingCategory) { return contacts.find((contact) => contact.id === (category === 'gene' ? 'dariana' : 'lucia')) ?? contacts[0]; }
 export function normalizePhone(value: string): string { const digits = value.replace(/\D/g, ''); if (digits.startsWith('00')) return `+${digits.slice(2)}`; if (digits.startsWith('0')) return `+40${digits.slice(1)}`; if (digits.startsWith('40')) return `+${digits}`; return `+${digits}`; }
