@@ -50,6 +50,6 @@ export function buildWhatsAppMessage(data: BookingFormData): string {
     `Categorie: ${bookingCategoryLabel[category]}`, `Serviciu: ${selectedService?.name ?? 'Nu a fost ales'}`, `Durată estimată: ${selectedService ? formatServiceDuration(selectedService) : 'Detalii în curs de actualizare'}`, `Preț afișat: ${selectedService ? formatServicePrice(selectedService) : 'Detalii în curs de actualizare'}`, '',
     `Data preferată: ${formatBookingDate(data.preferredDate)}`, `Ora preferată: ${data.preferredTime || 'Nu a fost aleasă'}`, '',
   ];
-  lines.push(`Nume: ${data.clientName.trim()}`, `Telefon: ${data.clientPhone.trim()}`, '', 'Observații:', data.notes.trim() || 'Nu au fost adăugate.', '', `Locație:`, location.address, '', `Program: ${siteConfig.scheduleLabel}`, '', isUnknown ? 'Știu că serviciul, data și ora vor fi confirmate ulterior.' : 'Știu că data și ora vor fi confirmate ulterior.');
+  lines.push(`Nume: ${data.clientName.trim()}`, `Telefon: ${data.clientPhone.trim()}`, '', 'Observații:', data.notes.trim() || 'Nu au fost adăugate.', '', `Locație:`, location.address, '', `Program: ${siteConfig.scheduleLabel}`, '', isUnknown ? 'Aștept recomandarea ta pentru serviciul potrivit și confirmarea disponibilității pentru data și ora alese. Mulțumesc!' : 'Aștept confirmarea disponibilității pentru intervalul ales. Mulțumesc!');
   return lines.join('\n');
 }
