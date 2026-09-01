@@ -25,6 +25,7 @@ export default function Home() {
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [galleryFilter, setGalleryFilter] = useState<'toate' | GalleryCategory>('toate');
+  const [splitInView, setSplitInView] = useState(false);
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLElement>(null);
@@ -63,6 +64,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (introVisible) return;
+    const splitHero = document.getElementById('hero');
+    if (!splitHero) return;
+    const observer = new IntersectionObserver(([entry]) => setSplitInView(entry.isIntersecting), { threshold: 0.24 });
+    observer.observe(splitHero);
+    return () => observer.disconnect();
+  }, [introVisible]);
+
+  useEffect(() => {
     if (!menuOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setMenuOpen(false);
@@ -83,6 +93,12 @@ export default function Home() {
     setMenuOpen((open) => { if (open) window.setTimeout(() => menuButtonRef.current?.focus(), 50); return !open; });
   }
 
+  function handleDiscoverServices(event: React.MouseEvent<HTMLAnchorElement>) {
+    if (!window.matchMedia('(max-width: 699px)').matches) return;
+    event.preventDefault();
+    document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   const visibleGalleryItems = galleryFilter === 'toate'
     ? featuredGalleryItems
     : featuredGalleryItems.filter((item) => item.category === galleryFilter);
@@ -101,9 +117,9 @@ export default function Home() {
         </div>
       </header>
 
-      <section id="hero" className={`split-hero${heroReady ? ' hero-ready' : ''}`} aria-label="Alege serviciul dorit"><div className="split-panel split-panel-lashes"><a href="/programare?categorie=gene" aria-label="Programează-te acum pentru gene cu Dariana"><div className="split-image-frame"><img className="split-panel-image" src="/assets/beauty/lashes-eye-cutout.png" alt="Ochi cu gene accentuate" /></div><div className="split-panel-content"><p className="split-kicker">Cu Dariana</p><h1>GENE</h1><p>Extensii de gene și efecte personalizate.</p><span className="split-link">Programează-te acum pentru gene</span></div></a></div><div className="split-divider" aria-hidden="true" /><div className="split-panel split-panel-nails"><a href="/programare?categorie=unghii" aria-label="Programează-te acum pentru unghii cu Lucia"><div className="split-image-frame"><img className="split-panel-image" src="/assets/beauty/nails-hand-cutout.png" alt="Mână cu unghii îngrijite" /></div><div className="split-panel-content"><p className="split-kicker">Cu Lucia</p><h1>UNGHII</h1><p>Manichiură, întreținere și design personalizat.</p><span className="split-link">Programează-te acum pentru unghii</span></div></a></div></section>
+      <section id="hero" className={`split-hero${heroReady ? ' hero-ready' : ''}${splitInView ? ' split-in-view' : ''}`} aria-label="Alege serviciul dorit"><div className="split-panel split-panel-lashes"><a href="/programare?categorie=gene" aria-label="Programează-te acum pentru gene cu Dariana"><div className="split-image-frame"><img className="split-panel-image" src="/assets/beauty/lashes-eye-cutout.png" alt="Ochi cu gene accentuate" /></div><div className="split-panel-content"><p className="split-kicker">Cu Dariana</p><h1>GENE</h1><p>Extensii de gene și efecte personalizate.</p><span className="split-link">Programează-te acum pentru gene</span></div></a></div><div className="split-divider" aria-hidden="true" /><div className="split-panel split-panel-nails"><a href="/programare?categorie=unghii" aria-label="Programează-te acum pentru unghii cu Lucia"><div className="split-image-frame"><img className="split-panel-image" src="/assets/beauty/nails-hand-cutout.png" alt="Mână cu unghii îngrijite" /></div><div className="split-panel-content"><p className="split-kicker">Cu Lucia</p><h1>UNGHII</h1><p>Manichiură, întreținere și design personalizat.</p><span className="split-link">Programează-te acum pentru unghii</span></div></a></div></section>
 
-      <section id="despre" className="studio-intro" aria-labelledby="studio-intro-title"><div className="section-copy"><h2 id="studio-intro-title">Precizie care se simte, stil care rămâne.</h2><p>Un spațiu creat pentru momentele în care frumusețea devine timp pentru tine. Fiecare formă, textură și finisaj este ales cu grijă.</p><a className="text-link" href="#servicii">Descoperă serviciile</a><ul className="benefit-list"><li><span className="benefit-icon benefit-icon-detail" aria-hidden="true" /><div><strong>Atenție la detalii</strong><small>Fiecare finisaj este atent lucrat.</small></div></li><li><span className="benefit-icon benefit-icon-premium" aria-hidden="true" /><div><strong>Produse premium</strong><small>Texturi și formule alese cu grijă.</small></div></li><li><span className="benefit-icon benefit-icon-custom" aria-hidden="true" /><div><strong>Rezultate personalizate</strong><small>Un look creat pentru tine.</small></div></li></ul></div></section>
+      <section id="despre" className="studio-intro" aria-labelledby="studio-intro-title"><div className="section-copy"><h2 id="studio-intro-title">Precizie care se simte, stil care rămâne.</h2><p>Un spațiu creat pentru momentele în care frumusețea devine timp pentru tine. Fiecare formă, textură și finisaj este ales cu grijă.</p><a className="text-link" href="#servicii" onClick={handleDiscoverServices}>Descoperă serviciile</a><ul className="benefit-list"><li><span className="benefit-icon benefit-icon-detail" aria-hidden="true" /><div><strong>Atenție la detalii</strong><small>Fiecare finisaj este atent lucrat.</small></div></li><li><span className="benefit-icon benefit-icon-premium" aria-hidden="true" /><div><strong>Produse premium</strong><small>Texturi și formule alese cu grijă.</small></div></li><li><span className="benefit-icon benefit-icon-custom" aria-hidden="true" /><div><strong>Rezultate personalizate</strong><small>Un look creat pentru tine.</small></div></li></ul></div></section>
 
       <section id="servicii" className="services-preview" aria-labelledby="services-title"><div className="services-heading"><h2 id="services-title">Ritualuri create pentru tine.</h2></div><div className="service-list"><article><div className="service-icon service-icon-lashes" aria-hidden="true" /><h3>Gene</h3><p>Privire definită, proporții naturale și un rezultat care te reprezintă.</p></article><article><div className="service-icon service-icon-nails" aria-hidden="true" /><h3>Unghii</h3><p>Forme curate, nuanțe atent alese și detalii care completează fiecare gest.</p></article><article><div className="service-icon service-icon-experience" aria-hidden="true" /><h3>Experiență personalizată</h3><p>Un ritual creat pentru tine, de la prima inspirație până la ultimul detaliu.</p></article></div></section>
 
