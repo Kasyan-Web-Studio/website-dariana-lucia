@@ -25,19 +25,23 @@ export function AboutSection({ page = false }: AboutSectionProps) {
 
           return (
             <article className={`specialist-card specialist-card-${specialist.name.toLowerCase()}`} key={specialist.name}>
-              {'image' in specialist && specialist.image && (
-                <div className="specialist-photo-wrap">
-                  <img
-                    className="specialist-photo"
-                    src={specialist.image}
-                    alt={specialist.imageAlt}
-                    loading={page ? 'eager' : 'lazy'}
-                    decoding="async"
-                  />
+              <div className={`specialist-card-header${'image' in specialist && specialist.image ? ' has-photo' : ''}`}>
+                <div className="specialist-card-title">
+                  <p className="specialist-role">{specialist.role}</p>
+                  <h2>{specialist.name}</h2>
                 </div>
-              )}
-              <p className="specialist-role">{specialist.role}</p>
-              <h2>{specialist.name}</h2>
+                {'image' in specialist && specialist.image && (
+                  <div className="specialist-photo-wrap">
+                    <img
+                      className="specialist-photo"
+                      src={specialist.image}
+                      alt={specialist.imageAlt}
+                      loading={page ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  </div>
+                )}
+              </div>
               <p>{specialist.description}</p>
               <p className="card-schedule">{siteConfig.scheduleLabel}</p>
               <div className="card-contact-links">
