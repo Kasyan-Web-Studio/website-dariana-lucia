@@ -24,7 +24,18 @@ export function AboutSection({ page = false }: AboutSectionProps) {
           const contact = contactById[specialist.name.toLowerCase() as 'dariana' | 'lucia'];
 
           return (
-            <article className="specialist-card" key={specialist.name}>
+            <article className={`specialist-card specialist-card-${specialist.name.toLowerCase()}`} key={specialist.name}>
+              {'image' in specialist && specialist.image && (
+                <div className="specialist-photo-wrap">
+                  <img
+                    className="specialist-photo"
+                    src={specialist.image}
+                    alt={specialist.imageAlt}
+                    loading={page ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                </div>
+              )}
               <p className="specialist-role">{specialist.role}</p>
               <h2>{specialist.name}</h2>
               <p>{specialist.description}</p>
